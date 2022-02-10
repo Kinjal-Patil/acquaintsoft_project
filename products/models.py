@@ -16,6 +16,7 @@ class Category(models.Model):
     modify_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="category_modify_by", null=True,
                                   blank=True)
     modify_date = models.DateTimeField(default=datetime.today())
+    is_del = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -32,6 +33,7 @@ class Products(models.Model):
     add_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="product_add_by")
     add_date = models.DateTimeField(default=datetime.today())
     del_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="product_del_by", null=True, blank=True)
+    is_del = models.BooleanField(default=False)
     del_date = models.DateTimeField(default=datetime.today())
     modify_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="product_modify_by", null=True,
                                   blank=True)
