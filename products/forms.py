@@ -22,9 +22,6 @@ class SignupForm(UserCreationForm):
 
 
 class ProductForm(forms.ModelForm):
-    manufacturing_date = forms.DateTimeField(input_formats=['%d/%m/%Y'])
-    expiry_date = forms.DateTimeField(input_formats=['%d/%m/%Y'])
-
     class Meta:
         model = Products
         fields = ("category", "product_name", "product_code", "price", "manufacturing_date", "expiry_date")
