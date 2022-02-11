@@ -50,8 +50,10 @@
                                         <td>{{ category.pk }}</td>
                                         <td>{{ category.name }}</td>
                                         <td>
+                                            {% if request.user.is_superuser %}
                                             <a class="btn btn-primary"
                                                href="{% url 'update_category' category.pk %}">Edit</a>
+                                            {% endif %}
                                             {#                                            <a class="btn btn-danger" href="{% url 'delete_product' product.pk %}">Delete</a>#}
                                         </td>
                                     </tr>
