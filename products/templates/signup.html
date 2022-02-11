@@ -1,105 +1,89 @@
 {% load static %}
 <!DOCTYPE html>
-<html class="no-js" lang="en">
-
-<!-- belle/register.html   11 Nov 2019 12:22:27 GMT -->
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Create an Account &ndash; Belle Multipurpose Bootstrap 4 Template</title>
-    <meta name="description" content="description">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="{% static '/assets/images/favicon.png' %}"/>
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="{% static "/assets/css/plugins.css" %}">
-    <!-- Bootstap CSS -->
-    <link rel="stylesheet" href="{% static "/assets/css/bootstrap.min.css" %}">
-    <!-- Main Style CSS -->
-    <link rel="stylesheet" href="{% static "/assets/css/style.css" %}">
-    <link rel="stylesheet" href="{% static "/assets/css/responsive.css" %}">
+    <title>AdminLTE 3 | Registration Page</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
 </head>
-<body class="page-template belle">
-<div class="pageWrapper">
+<body class="hold-transition register-page">
+<div class="register-box">
+    <div class="register-logo">
+        <a href="{% url 'home' %}"><b>Admin</b>LTE</a>
+    </div>
+    {% if form.errors %}
+        <p>username or password not correct</p>
+    {% endif %}
+    <div class="card">
+        <div class="card-body register-card-body">
+            <p class="login-box-msg">Register a new membership</p>
 
-    <!--Body Content-->
-    <div id="page-content">
-        <!--Page Title-->
-        <div class="page section-header text-center">
-            <div class="page-title">
-                <div class="wrapper"><h1 class="page-width">Create an Account</h1></div>
-            </div>
-        </div>
-        <!--End Page Title-->
-        {% if form.errors %}
-            <p>username or password not correct</p>
-        {% endif %}
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 main-col offset-md-3">
-                    <div class="mb-4">
-                        <form method="post" action="#" id="CustomerLoginForm" accept-charset="UTF-8"
-                              class="contact-form">
-
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div class="form-group">
-                                        <label for="FirstName">Username</label>
-                                        {{ signup_form.username }}
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div class="form-group">
-                                        <label for="CustomerEmail">Email</label>
-                                        {{ signup_form.email }}
-
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div class="form-group">
-                                        <label for="CustomerPassword">Password</label>
-                                        {{ signup_form.password1 }}
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div class="form-group">
-                                        <label for="CustomerPassword">Retype Password</label>
-                                        {{ signup_form.password2 }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="text-center col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <input type="submit" class="btn mb-3" value="Create">
-                                </div>
-                            </div>
-                        </form>
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="username" placeholder="Username">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="input-group mb-3">
+                    <input type="email" class="form-control" name="email" placeholder="Email">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" name="password1" placeholder="Password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" name="password2" placeholder="Retype password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+
+            <a href="{% url 'signin' %}" class="text-center">I already have a membership</a>
         </div>
-
-    </div>
-    <!--End Body Content-->
-
-    <!--Scoll Top-->
-    <span id="site-scroll"><i class="icon anm anm-angle-up-r"></i></span>
-    <!--End Scoll Top-->
-
-    <!-- Including Jquery -->
-    <script src="{% static "/assets/js/vendor/jquery-3.3.1.min.js" %}"></script>
-    <script src="{% static "/assets/js/vendor/jquery.cookie.js" %}"></script>
-    <script src="{% static "/assets/js/vendor/modernizr-3.6.0.min.js" %}"></script>
-    <script src="{% static "/assets/js/vendor/wow.min.js" %}"></script>
-    <!-- Including Javascript -->
-    <script src="{% static "/assets/js/bootstrap.min.js" %}"></script>
-    <script src="{% static "/assets/js/plugins.js" %}"></script>
-    <script src="{% static "/assets/js/popper.min.js" %}"></script>
-    <script src="{% static "/assets/js/lazysizes.js" %}"></script>
-    <script src="{% static "/assets/js/main.js" %}"></script>
+        <!-- /.form-box -->
+    </div><!-- /.card -->
 </div>
-</body>
+<!-- /.register-box -->
 
-<!-- belle/register.html   11 Nov 2019 12:22:27 GMT -->
+<!-- jQuery -->
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+</body>
 </html>
