@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -9,7 +10,7 @@ from django.utils import timezone
 from django.views.generic import *
 
 from .forms import SignupForm, ProductForm, CategoryForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 
 from .models import Products, Category
@@ -18,7 +19,6 @@ from .models import Products, Category
 def signup(request):
     if request.method == "POST":
         form = SignupForm(request.POST)
-        print(form, "\n\n\n")
         if form.is_valid():
             form.save()
             messages.success(request, "Registration successful.")
@@ -49,9 +49,10 @@ def signin(request):
     return render(request=request, template_name="signin.html", context={"login_form": form})
 
 
-class Home(ListView):
+class Home(LoginRequiredMixin, ListView):
     model = User
     template_name = "home.html"
+    login_url = '/login/'
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -60,14 +61,17 @@ class Home(ListView):
 
     def get_context_data(self, **kwargs):
         kwargs['product_list'] = Products.objects.filter(is_del=False)
-        kwargs['category'] = Products.objects.filter(is_del=False)
+        kwargs['product_count'] = kwargs['product_list'].count()
+        kwargs['category_list'] = Products.objects.filter(is_del=False)
+        kwargs['category_count'] = kwargs['category_list'].count()
         return kwargs
 
 
-class CreateProduct(CreateView):
+class CreateProduct(LoginRequiredMixin, CreateView):
     model = Products
     form_class = ProductForm
     template_name = "create_product.html"
+    login_url = '/login/'
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -83,13 +87,14 @@ class CreateProduct(CreateView):
         return redirect('create_product')
 
 
-class ProductList(ListView):
+class ProductList(LoginRequiredMixin, ListView):
     model = Products
-    template_name = "home.html"
+    template_name = "product_list.html"
+    login_url = '/login/'
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return HttpResponseRedirect('signup')
+            return HttpResponseRedirect('signin')
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -97,11 +102,12 @@ class ProductList(ListView):
         return kwargs
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Products
     form_class = ProductForm
     template_name = 'edit_products.html'
     pk_url_kwarg = 'pk'
+    login_url = '/login/'
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -116,10 +122,11 @@ class ProductUpdateView(UpdateView):
         return redirect('home')
 
 
-class CreateCategory(CreateView):
+class CreateCategory(LoginRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
     template_name = "create_category.html"
+    login_url = '/login/'
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -137,11 +144,12 @@ class CreateCategory(CreateView):
         return redirect("create_category")
 
 
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     model = Category
     fields = ('name',)
     template_name = 'edit_category.html'
     pk_url_kwarg = 'pk'
+    login_url = '/login/'
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -157,3 +165,18 @@ class CategoryUpdateView(UpdateView):
         post.modify_date = timezone.now()
         post.save()
         return redirect('home')
+
+
+class CategoryList(LoginRequiredMixin, ListView):
+    model = Category
+    template_name = "category_list.html"
+    login_url = '/login/'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect('signin')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        kwargs['category_list'] = Category.objects.filter(is_del=False)
+        return kwargs
